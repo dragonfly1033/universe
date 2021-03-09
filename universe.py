@@ -59,14 +59,10 @@ with open('syllables.pickle', 'rb') as f:
 rand()
 run = True
 while run:
+
     for event in pg.event.get():
         if event.type == pg.QUIT:
             run = False
-        if event.type == pg.MOUSEBUTTONDOWN:
-            if event.button == 1:
-                for system in showing:
-                    if system.isOver(x, y):
-                        print(system.name)
 
     keys = pg.key.get_pressed()
     if keys[pg.K_LSHIFT]:
