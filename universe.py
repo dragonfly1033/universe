@@ -1,5 +1,6 @@
 import pygame as pg
 from system import System
+import pickle
 
 
 def lehmer(low, high):
@@ -10,6 +11,7 @@ def lehmer(low, high):
     tmp = m1 * 0x12fad5c9
     m2 = (tmp >> 32) ^ tmp
     return m2%(high-low) + low
+
 
 
 def rand():
@@ -28,7 +30,8 @@ def rand():
             if lehmer(0,15) == 0:
                 colour = (lehmer(0,256), lehmer(0,256), lehmer(0,256))
                 r = lehmer(5,(sectorSize-1)//2)
-                new = System(colour, px+(sectorSize//2), py+(sectorSize//2), r, display)
+                name = ''.join([syllables[lehmer(0,len(syllables))] for i in range(lehmer(3,7))])
+                new = System(name, colour, px+(sectorSize//2), py+(sectorSize//2), r, display)
                 new.plot()
                 showing.append(new)
     coord = font.render(f'({cX},{cY})', False, (255,255,255))
@@ -50,6 +53,8 @@ lseed = 0
 sectorSize = 36
 vel = 4
 showing = []
+with open('syllables.pickle', 'rb') as f:
+    syllables = pickle.load(f)
 
 rand()
 run = True
@@ -61,7 +66,7 @@ while run:
             if event.button == 1:
                 for system in showing:
                     if system.isOver(x, y):
-                        pass
+                        print(system.name)
 
     keys = pg.key.get_pressed()
     if keys[pg.K_LSHIFT]:
